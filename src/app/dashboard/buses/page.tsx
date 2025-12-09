@@ -16,6 +16,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Bus, Circle, Clock } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const busLines = [
   { id: '3A', name: 'Linha 3A: Sé', status: 'A tempo', nextArrival: 5 },
@@ -54,44 +56,45 @@ export default function BusesPage() {
             <CardHeader>
               <CardTitle>Próximas Chegadas</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-2">
               {busLines.map((line) => (
-                <div
-                  key={line.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <Bus className="h-6 w-6 text-primary" />
-                    <div>
-                      <p className="font-semibold">{line.name}</p>
-                      <p
-                        className={`text-xs flex items-center gap-1 ${
-                          line.status === 'Atrasado'
-                            ? 'text-destructive'
-                            : 'text-accent-foreground'
-                        }`}
-                      >
-                        <Circle
-                          fill={
-                            line.status === 'Atrasado'
-                              ? 'hsl(var(--destructive))'
-                              : 'hsl(var(--accent))'
-                          }
-                          className={`h-2 w-2 ${
-                            line.status === 'Atrasado'
-                              ? 'text-destructive'
-                              : 'text-accent'
-                          }`}
-                        />{' '}
-                        {line.status}
-                      </p>
+                <Button asChild variant="ghost" className="h-auto w-full justify-start p-0" key={line.id}>
+                  <Link href={`/dashboard/buses/${line.id}`}>
+                    <div className="flex w-full items-center justify-between p-3 bg-muted rounded-lg hover:bg-accent/50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <Bus className="h-6 w-6 text-primary" />
+                        <div>
+                          <p className="font-semibold">{line.name}</p>
+                          <p
+                            className={`text-xs flex items-center gap-1 ${
+                              line.status === 'Atrasado'
+                                ? 'text-destructive'
+                                : 'text-accent-foreground'
+                            }`}
+                          >
+                            <Circle
+                              fill={
+                                line.status === 'Atrasado'
+                                  ? 'hsl(var(--destructive))'
+                                  : 'hsl(var(--accent))'
+                              }
+                              className={`h-2 w-2 ${
+                                line.status === 'Atrasado'
+                                  ? 'text-destructive'
+                                  : 'text-accent'
+                              }`}
+                            />{' '}
+                            {line.status}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right flex items-center gap-2">
+                        <Clock className="h-5 w-5 text-muted-foreground" />
+                        <p className="font-bold text-lg">{line.nextArrival} min</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right flex items-center gap-2">
-                     <Clock className="h-5 w-5 text-muted-foreground" />
-                    <p className="font-bold text-lg">{line.nextArrival} min</p>
-                  </div>
-                </div>
+                  </Link>
+                </Button>
               ))}
             </CardContent>
           </Card>
