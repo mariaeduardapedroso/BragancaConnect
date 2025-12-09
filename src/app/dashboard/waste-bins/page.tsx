@@ -15,7 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Trash2, Circle, Clock } from 'lucide-react';
+import { Trash2, Circle } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const binData = [
   { id: 'bin-001', location: 'Praça da Sé', level: 95, status: 'Cheio', type: 'Indiferenciado' },
@@ -69,26 +71,29 @@ export default function WasteBinsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {binData.map((bin) => (
-                <div
-                  key={bin.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <Trash2 className="h-6 w-6 text-primary" />
-                    <div>
-                      <p className="font-semibold">{bin.location}</p>
-                      <p className="text-xs text-muted-foreground">{bin.type}</p>
-                    </div>
-                  </div>
-                  <div className="text-right flex items-center gap-2">
-                     <Circle
-                        fill={getStatusColor(bin.status)}
-                        className="h-3 w-3"
-                        style={{color: getStatusColor(bin.status)}}
-                      />
-                    <p className="font-bold text-lg">{bin.level}%</p>
-                  </div>
-                </div>
+                 <Button asChild variant="ghost" className="h-auto w-full justify-start p-0" key={bin.id}>
+                    <Link href={`/dashboard/waste-bins/${bin.id}`}>
+                        <div
+                        className="flex items-center justify-between p-3 bg-muted rounded-lg w-full hover:bg-accent/50 transition-colors"
+                        >
+                        <div className="flex items-center gap-3 text-left">
+                            <Trash2 className="h-6 w-6 text-primary" />
+                            <div>
+                            <p className="font-semibold">{bin.location}</p>
+                            <p className="text-xs text-muted-foreground">{bin.type}</p>
+                            </div>
+                        </div>
+                        <div className="text-right flex items-center gap-2">
+                            <Circle
+                                fill={getStatusColor(bin.status)}
+                                className="h-3 w-3"
+                                style={{color: getStatusColor(bin.status)}}
+                            />
+                            <p className="font-bold text-lg">{bin.level}%</p>
+                        </div>
+                        </div>
+                    </Link>
+                </Button>
               ))}
             </CardContent>
           </Card>
