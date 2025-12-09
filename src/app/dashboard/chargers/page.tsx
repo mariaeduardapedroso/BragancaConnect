@@ -15,7 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { BatteryCharging, Circle, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 const chargerData = [
     { id: 'ev-01', location: 'Câmara Municipal', status: 'Disponível', type: 'CCS', distance: '500m' },
@@ -64,28 +66,31 @@ export default function ChargersPage() {
             <CardHeader>
               <CardTitle>Postos Próximos</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-2">
               {chargerData.map((charger) => (
-                <div
-                  key={charger.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <BatteryCharging className="h-6 w-6 text-primary" />
-                    <div>
-                      <p className="font-semibold">{charger.location}</p>
-                       <p className="text-xs text-muted-foreground">{charger.type} - {charger.distance}</p>
+                <Button asChild variant="ghost" className="h-auto w-full justify-start p-0" key={charger.id}>
+                  <Link href={`/dashboard/chargers/${charger.id}`}>
+                    <div
+                      className="flex items-center justify-between p-3 bg-muted rounded-lg w-full hover:bg-accent/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 text-left">
+                        <BatteryCharging className="h-6 w-6 text-primary" />
+                        <div>
+                          <p className="font-semibold">{charger.location}</p>
+                          <p className="text-xs text-muted-foreground">{charger.type} - {charger.distance}</p>
+                        </div>
+                      </div>
+                      <div className="text-right flex items-center gap-2">
+                        <Circle
+                            fill={getStatusColor(charger.status)}
+                            className="h-3 w-3"
+                            style={{color: getStatusColor(charger.status)}}
+                          />
+                        <p className="font-semibold text-sm">{charger.status}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right flex items-center gap-2">
-                     <Circle
-                        fill={getStatusColor(charger.status)}
-                        className="h-3 w-3"
-                        style={{color: getStatusColor(charger.status)}}
-                      />
-                    <p className="font-semibold text-sm">{charger.status}</p>
-                  </div>
-                </div>
+                  </Link>
+                </Button>
               ))}
             </CardContent>
           </Card>

@@ -7,7 +7,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
 import {
   Select,
@@ -16,8 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Trees, Sun, Zap, Bike, Smartphone } from 'lucide-react';
+import { Trees, Sun, Zap, Bike, Smartphone, ArrowRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const ecoparkData = [
     { id: 'ep-01', name: 'Ecoparque do Castelo', energy: 15.2, slots: 8, occupied: 3 },
@@ -44,7 +45,7 @@ export default function EcoparkPage() {
                 <SelectContent>
                   <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="available">Com Vagas Livres</SelectItem>
-                </SelectContent>
+                </Content>
               </Select>
             </CardContent>
           </Card>
@@ -54,7 +55,8 @@ export default function EcoparkPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {ecoparkData.map((park) => (
-                <Card key={park.id} className="p-4">
+                <Card key={park.id} className="p-4 overflow-hidden">
+                  <Link href={`/dashboard/ecopark/${park.id}`} className="block hover:bg-muted/50 -m-4 p-4">
                     <div className="flex items-center gap-3 mb-3">
                         <Trees className="h-6 w-6 text-primary" />
                         <div>
@@ -70,10 +72,14 @@ export default function EcoparkPage() {
                         <Progress value={(park.occupied / park.slots) * 100} className="h-3 flex-1"/>
                         <p className="font-bold text-base">{park.slots - park.occupied} / {park.slots}</p>
                     </div>
-                    <div className="flex items-center gap-4 text-muted-foreground mt-2 text-sm">
-                        <p className="flex items-center gap-1"><Bike className="h-4 w-4"/>Bicicletas</p>
-                        <p className="flex items-center gap-1"><Smartphone className="h-4 w-4"/>Dispositivos</p>
+                    <div className="flex items-center justify-between text-muted-foreground mt-2 text-sm">
+                        <div className='flex items-center gap-4'>
+                          <p className="flex items-center gap-1"><Bike className="h-4 w-4"/>Bicicletas</p>
+                          <p className="flex items-center gap-1"><Smartphone className="h-4 w-4"/>Dispositivos</p>
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-primary" />
                     </div>
+                  </Link>
                 </Card>
               ))}
             </CardContent>
