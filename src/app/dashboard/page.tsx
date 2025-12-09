@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -176,7 +178,7 @@ export default function DashboardPage() {
               <span>Ecoparques Solares</span>
             </CardTitle>
              <CardDescription>Energia e vagas disponíveis</CardDescription>
-          </CardHeader>
+          </HA>
           <CardContent>
              <p className="text-sm text-muted-foreground">Energia Total Gerada Hoje</p>
             <p className="text-4xl font-bold">42.5 <span className="text-lg font-normal text-muted-foreground">kWh</span></p>
