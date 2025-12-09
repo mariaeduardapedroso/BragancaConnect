@@ -72,8 +72,8 @@ export function AppHeader() {
                 <Link href="/dashboard/settings">Definições</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                <Link href="/login">Sair</Link>
+            <DropdownMenuItem>
+                <Link href="/login" className='text-destructive'>Sair</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

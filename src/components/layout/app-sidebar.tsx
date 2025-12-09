@@ -14,21 +14,17 @@ import {
 } from '@/components/ui/sidebar';
 import { Icons } from '@/components/icons';
 import { NAV_ITEMS } from '@/lib/nav-items';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Settings, LogOut } from 'lucide-react';
-import { Button } from '../ui/button';
+import { useSidebar } from '../ui/sidebar';
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const userAvatar = PlaceHolderImages.find(
-    (img) => img.id === 'user-avatar-1'
-  );
+  const { state } = useSidebar();
 
   return (
     <Sidebar
-      className="border-r"
-      collapsible="icon"
+      className="border-r max-w-[1440px]"
+      collapsible={state === 'collapsed' ? 'icon' : 'offcanvas'}
       variant="sidebar"
       side="left"
     >

@@ -28,9 +28,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-2xl">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
+            <Link href="/" className='flex justify-center mb-4'>
               <Icons.logo className="h-16 w-16 text-primary" />
-            </div>
+            </Link>
             <CardTitle className="text-3xl">Bem-vindo</CardTitle>
             <CardDescription className="text-base">
               Aceda à plataforma Smart Bragança
@@ -46,7 +46,7 @@ export default function LoginPage() {
                 type="text"
                 placeholder="seunome@email.com ou 123456789"
                 required
-                className="h-12 text-base"
+                className="h-14 text-lg"
               />
             </div>
             <div className="space-y-2">
@@ -57,13 +57,13 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 required
-                className="h-12 text-base"
+                className="h-14 text-lg"
                 placeholder="********"
               />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full h-12 text-lg">
+            <Button type="submit" className="w-full h-14 text-lg">
               Entrar
             </Button>
             <p className="text-sm text-muted-foreground">
