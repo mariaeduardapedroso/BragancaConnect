@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "splash-bg",
+      "description": "A scenic view of Bragança, Portugal at dusk.",
+      "imageUrl": "https://images.unsplash.com/photo-1689949808572-47e06a565e1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxCcmFnYW4lQzMlQTdhJTIwY2FzdGxlfGVufDB8fHx8MTc2NTMxNjM4MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Bragança castle"
+    },
+    {
+      "id": "map-placeholder",
+      "description": "A placeholder map of a city with streets and buildings.",
+      "imageUrl": "https://images.unsplash.com/photo-1446776899648-aa78eefe8ed0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaXR5JTIwbWFwfGVufDB8fHx8MTc2NTMxMzMzN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city map"
+    },
+    {
+      "id": "user-avatar-1",
+      "description": "A placeholder avatar for a user.",
+      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjUyNDQyOTZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "reward-1",
+      "description": "Discount on local produce.",
+      "imageUrl": "https://images.unsplash.com/photo-1557844352-761f2565b576?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmVzaCUyMHZlZ2V0YWJsZXN8ZW58MHx8fHwxNzY1MjQzODAzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fresh vegetables"
+    },
+    {
+      "id": "reward-2",
+      "description": "Voucher for a farmer's market.",
+      "imageUrl": "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXJrZXQlMjBzdGFsbHxlbnwwfHx8fDE3NjUzMTYzODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "market stall"
+    },
+    {
+      "id": "reward-3",
+      "description": "Free coffee at a local cafe.",
+      "imageUrl": "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb2ZmZWUlMjBjdXB8ZW58MHx8fHwxNzY1MzEwNTI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coffee cup"
+    }
+  ]
 }
