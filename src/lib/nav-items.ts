@@ -1,3 +1,4 @@
+
 import {
   Home,
   Bus,
@@ -8,6 +9,7 @@ import {
   Route,
   User,
   Settings,
+  Tv,
 } from 'lucide-react';
 
 export const NAV_ITEMS = [
@@ -22,6 +24,7 @@ export const NAV_ITEMS = [
     icon: Route,
     label: 'Rotas',
   },
+  { href: '/dashboard/bus-stop-display', icon: Tv, label: 'Ecrã TV Paragem'},
   { href: '/dashboard/profile', icon: User, label: 'Perfil' },
   { href: '/dashboard/settings', icon: Settings, label: 'Definições'},
 ];
