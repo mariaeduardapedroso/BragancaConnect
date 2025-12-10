@@ -13,7 +13,7 @@ import { Trash2, Circle, Route, Clock, AlertTriangle } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
-const WasteBinMap = dynamic(() => import('@/components/waste-bin-map'), { ssr: false });
+const WasteBinRouteMap = dynamic(() => import('@/components/waste-bin-route-map'), { ssr: false });
 
 
 const binsOnRoute = [
@@ -101,8 +101,8 @@ export default function OptimizedRoutePage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="aspect-video h-auto">
-            {isClient && <WasteBinMap />}
+          <div className="aspect-video h-auto min-h-[400px]">
+            {isClient && <WasteBinRouteMap />}
           </div>
         </CardContent>
       </Card>
