@@ -12,6 +12,10 @@ import {
 } from '@/components/ui/card';
 import { Bus, Clock, MapPin, Circle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+
+const BusMap = dynamic(() => import('@/components/bus-map'), { ssr: false });
 
 // Static data for a single bus line
 const busLineDetails = {
@@ -40,6 +44,12 @@ const getStatusColor = (status: string) => {
 };
 
 export default function BusLineDetailPage({ params }: { params: { id: string } }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div>
       <PageTitle title="Detalhes da Linha">
@@ -99,7 +109,7 @@ export default function BusLineDetailPage({ params }: { params: { id: string } }
             </CardHeader>
           <CardContent className="p-0 h-full">
             <div className="h-full w-full rounded-b-lg bg-muted flex items-center justify-center min-h-[300px] md:min-h-0">
-                 <p className="text-muted-foreground">Mapa com o percurso da linha apareceria aqui.</p>
+                 {isClient && <BusMap />}
             </div>
           </CardContent>
         </Card>
