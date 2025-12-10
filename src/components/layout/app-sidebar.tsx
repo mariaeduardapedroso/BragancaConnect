@@ -61,6 +61,18 @@ export function AppSidebar() {
       <SidebarSeparator />
       <SidebarFooter className="p-2">
         <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === '/dashboard/settings'}
+                tooltip="Definições"
+              >
+                <Link href="/dashboard/settings">
+                  <Settings className="h-5 w-5" />
+                  <span>Definições</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
              <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Sair">
                   <Link href="/login">
