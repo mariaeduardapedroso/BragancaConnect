@@ -33,7 +33,7 @@ export default function LoginPage() {
             </Link>
             <CardTitle className="text-3xl">Bem-vindo</CardTitle>
             <CardDescription className="text-base">
-              Aceda à plataforma Smart Bragança
+              Aceda à plataforma Smart Genius
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

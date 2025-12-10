@@ -52,7 +52,7 @@ export default function ProfileSelectionPage() {
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center text-center text-white">
         <Icons.logo className="h-20 w-20 mb-4 text-white" />
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-          Bem-vindo à Smart Bragança
+          Bem-vindo à Smart Genius
         </h1>
         <p className="mt-4 text-base sm:text-lg md:text-xl font-light max-w-2xl">
           Selecione o seu perfil para aceder à plataforma e descobrir uma cidade

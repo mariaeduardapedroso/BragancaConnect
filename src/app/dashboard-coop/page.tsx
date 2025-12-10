@@ -24,7 +24,7 @@ export default function CooperadoDashboardPage() {
   const handleGenerateQr = () => {
     if (parseFloat(amount) > 0) {
       // In a real app, this would generate a QR code with payment info
-      const qrValue = `smart-braganca-points:${amount}`;
+      const qrValue = `smart-genius-points:${amount}`;
       setQrCodeValue(qrValue);
     }
   };
