@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { MapContainer, TileLayer, Polyline, Marker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { cn } from '@/lib/utils';
-import { BusSimulator } from './bus-simulator';
+import { BusSimulator, routePolyline } from './bus-simulator';
 
 // Data extracted from maps.html
 const stops = [
@@ -44,11 +44,6 @@ const stops = [
     { nome: "Avenida João da Cruz", lat: 41.807384, lng: -6.758440 }
 ].map(p => ({ name: p.nome, coord: [p.lat, p.lng] as [number, number] }));
 
-export const routePolyline: [number, number][] = stops.map(s => s.coord);
-if (routePolyline.length > 0) {
-    routePolyline.push(routePolyline[0]); // Close the loop
-}
-
 export const stopIcon = new L.Icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
     iconSize: [22, 22],
@@ -85,7 +80,7 @@ export default function BusMap({ className }: { className?: string }) {
                     <Tooltip>{stop.name}</Tooltip>
                 </Marker>
             ))}
-            <BusSimulator />
+            <BusSimulator route={routePolyline} />
             <MapResizer />
         </MapContainer>
     );
