@@ -83,9 +83,9 @@ export default function CooperadoDashboardPage() {
             <>
               <CardContent className="flex flex-col items-center justify-center text-center p-8">
                 <p className="text-muted-foreground">Apresente este QR Code ao cidadão para pagamento.</p>
-                <div className="relative w-64 h-64 my-4 bg-muted flex items-center justify-center rounded-lg">
+                <div className="relative w-64 h-64 my-4 bg-white flex items-center justify-center rounded-lg p-4 border">
                   {/* Placeholder for actual QR code */}
-                   <Image src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${qrCodeValue}" alt="QR Code" width={256} height={256} />
+                   <Image src={`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${qrCodeValue}`} alt="QR Code" width={256} height={256} />
 
                 </div>
                  <div className="bg-accent/10 border-2 border-dashed border-accent rounded-xl p-4 w-full">
