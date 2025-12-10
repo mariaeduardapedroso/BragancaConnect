@@ -51,7 +51,7 @@ export default function WasteBinMap({ className }: { className?: string }) {
 
         // Icons
         const truckIcon = L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/3131/3131034.png',
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/1168/1168933.png',
             iconSize: [38, 38], iconAnchor: [19, 19],
         });
         const stopIcon = L.icon({
