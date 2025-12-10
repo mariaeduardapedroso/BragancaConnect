@@ -1,0 +1,286 @@
+diff --git a/node_modules/react-leaflet/lib/AttributionControl.js b/node_modules/react-leaflet/lib/AttributionControl.js
+index 7380907..064e43e 100644
+--- a/node_modules/react-leaflet/lib/AttributionControl.js
++++ b/node_modules/react-leaflet/lib/AttributionControl.js
+@@ -1,13 +1,13 @@
+ 'use client';
+-import { AttributionControl as LeafletAttributionControl } from 'leaflet';
+-import { useEffect } from 'react';
+-import { useLeafletContext } from './context.js';
+-import { withPane } from './pane.js';
+-export const AttributionControl = withPane(function AttributionControl(props) {
++import { AttributionControl as LeafletAttributionControl } from "leaflet";
++import { useEffect, useState } from "react";
++import { useLeafletContext } from "./context.js";
++import { withPane } from "./pane.js";
++export const AttributionControl = withPane(function AttributionControl(props) {
+     const context = useLeafletContext();
+     useEffect(()=>{
+         const control = new LeafletAttributionControl(props);
+         context.map.addControl(control);
+         return function cleanUp() {
+             context.map.removeControl(control);
+         };
+-    });
+-    return null;
++    }, []);
++    return props.children ? /*#__PURE__*/ createPortal(props.children, context.map.getContainer()) : null;
+ });
+diff --git a/node_modules/react-leaflet/lib/DivOverlay.js b/node_modules/react-leaflet/lib/DivOverlay.js
+index 9217642..653f538 100644
+--- a/node_modules/react-leaflet/lib/DivOverlay.js
++++ b/node_modules/react-leaflet/lib/DivOverlay.js
+@@ -1,11 +1,11 @@
+ 'use client';
+-import { createPortal } from 'react-dom';
+-import { createDivOverlayComponent } from './div-overlay.js';
++import { createPortal } from "react-dom";
++import { createDivOverlayComponent } from "./div-overlay.js";
+ export function DivOverlay(props) {
+     const { children , dom } = props;
+     if (dom == null) {
+         return null;
+     }
+     // @ts-ignore createPortal can take a DocumentFragment
+     return createPortal(children, dom);
+ }
+diff --git a/node_modules/react-leaflet/lib/ImageOverlay.js b/node_modules/react-leaflet/lib/ImageOverlay.js
+index e349079..5183864 100644
+--- a/node_modules/react-leaflet/lib/ImageOverlay.js
++++ b/node_modules/react-leaflet/lib/ImageOverlay.js
+@@ -1,13 +1,13 @@
+ 'use client';
+-import { imageOverlay } from 'leaflet';
+-import { createMediaOverlayComponent } from './media-overlay.js';
++import { imageOverlay } from "leaflet";
++import { createMediaOverlayComponent } from "./media-overlay.js";
+ export const ImageOverlay = createMediaOverlayComponent(function createImageOverlay({ bounds , url , ...options }, context) {
+     const overlay = imageOverlay(url, bounds, options);
+     return {
+         instance: overlay,
+         context,
+         createElement: (props)=>{
+             const { instance  } = overlay.getElement() ? overlay._image : {};
+             return {
+                 ...props,
+@@ -21,4 +21,4 @@
+         instance.setBounds(bounds);
+     }
+ }
+-});
+\ No newline at end of file
++});
+diff --git a/node_modules/react-leaflet/lib/LayerGroup.js b/node_modules/react-leaflet/lib/LayerGroup.js
+index 23d463e..6a9a0eb 100644
+--- a/node_modules/react-leaflet/lib/LayerGroup.js
++++ b/node_modules/react-leaflet/lib/LayerGroup.js
+@@ -1,14 +1,14 @@
+ 'use fi;le';
+-import { layerGroup } from 'leaflet';
+-import { createPathComponent } from './path.js';
++import { layerGroup } from "leaflet";
++import { createPathComponent } from "./path.js";
+ export const LayerGroup = createPathComponent(function createLayerGroup({ children: _c , ...options }, context) {
+     const lg = layerGroup([], options);
+     return {
+         instance: lg,
+         context: {
+             ...context,
+             layerContainer: lg
+         }
+     };
+-});
+\ No newline at end of file
++});
+diff --git a/node_modules/react-leaflet/lib/MapContainer.js b/node_modules/react-leaflet/lib/MapContainer.js
+index 224bfa1..00d720f 100644
+--- a/node_modules/react-leaflet/lib/MapContainer.js
++++ b/node_modules/react-leaflet/lib/MapContainer.js
+@@ -1,13 +1,13 @@
+ 'use client';
+-import { map } from 'leaflet';
+-import { Children, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+-import { LeafletContext } from './context.js';
++import { map } from "leaflet";
++import { Children, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
++import { LeafletContext } from "./context.js";
+ function MapContainerComponent({ children , className , id , placeholder , style , whenReady , ...options }, ref) {
+     const [mapInstance, setMap] = useState(null);
+     const [context, setContext] = useState(null);
+     const mapRef = useCallback((node)=>{
+         if (node !== null) {
+             const { center , zoom , ...mapOptions } = options;
+             const newMap = map(node, mapOptions);
+             if (center != null && zoom != null) {
+diff --git a/node_modules/react-leaflet/lib/Marker.js b/node_modules/react-leaflet/lib/Marker.js
+index 2d6a50b..6d8f89e 100644
+--- a/node_modules/react-leaflet/lib/Marker.js
++++ b/node_modules/react-leaflet/lib/Marker.js
+@@ -1,7 +1,7 @@
+ 'use client';
+-import { Marker as LeafletMarker } from 'leaflet';
+-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+-import { useAttribution } from './attribution.js';
+-import { LeafletProvider, useLeafletContext } from './context.js';
+-import { useEventHandlers } from './events.js';
++import { Marker as LeafletMarker } from "leaflet";
++import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
++import { useAttribution } from "./attribution.js";
++import { LeafletProvider, useLeafletContext } from "./context.js";
++import { useEventHandlers } from "./events.js";
+ function MarkerComponent({ children , ...options }, ref) {
+     const { position , ...markerOptions } = options;
+     const context = useLeafletContext();
+@@ -40,4 +40,4 @@
+     return children == null ? null : /*#__PURE__*/ React.createElement(LeafletProvider, {
+         value: contextValue
+     }, children);
+-});
+\ No newline at end of file
++});
+diff --git a/node_modules/react-leaflet/lib/Pane.js b/node_modules/react-leaflet/lib/Pane.js
+index 5488427..653d9e2 100644
+--- a/node_modules/react-leaflet/lib/Pane.js
++++ b/node_modules/react-leaflet/lib/Pane.js
+@@ -1,7 +1,7 @@
+ 'use client';
+-import { useLayoutEffect, useState, useMemo } from 'react';
+-import { LeafletProvider, useLeafletContext } from './context.js';
+-import { useEventHandlers } from './events.js';
++import { useLayoutEffect, useState, useMemo } from "react";
++import { LeafletProvider, useLeafletContext } from "./context.js";
++import { useEventHandlers } from "./events.js";
+ export function Pane(props) {
+     const [pane, setPane] = useState(null);
+     const context = useLeafletContext();
+diff --git a/node_modules/react-leaflet/lib/Popup.js b/node_modules/react-leaflet/lib/Popup.js
+index 0c950d7..2fde78a 100644
+--- a/node_modules/react-leaflet/lib/Popup.js
++++ b/node_modules/react-leaflet/lib/Popup.js
+@@ -1,6 +1,6 @@
+ 'use client';
+-import { popup } from 'leaflet';
+-import { createDivOverlayComponent } from './div-overlay.js';
++import { popup } from "leaflet";
++import { createDivOverlayComponent } from "./div-overlay.js";
+ export const Popup = createDivOverlayComponent(function createPopup(props, context) {
+     const popupInstance = popup(props, context.overlayContainer);
+     return {
+@@ -11,4 +11,4 @@
+         instance.setLatLng(props.position);
+     }
+ }
+-});
+\ No newline at end of file
++});
+diff --git a/node_modules/react-leaflet/lib/SVGOverlay.js b/node_modules/react-leaflet/lib/SVGOverlay.js
+index 57ed7f3..786e426 100644
+--- a/node_modules/react-leaflet/lib/SVGOverlay.js
++++ b/node_modules/react-leaflet/lib/SVGOverlay.js
+@@ -1,6 +1,6 @@
+ 'use client';
+-import { SVGOverlay as LeafletSVGOverlay } from 'leaflet';
+-import { createMediaOverlayComponent } from './media-overlay.js';
++import { SVGOverlay as LeafletSVGOverlay } from "leaflet";
++import { createMediaOverlayComponent } from "./media-overlay.js";
+ export const SVGOverlay = createMediaOverlayComponent(function createSVGOverlay({ attributes , bounds , ...options }, context) {
+     // @ts-ignore
+     const overlay = new LeafletSVGOverlay(undefined, bounds, options);
+diff --git a/node_modules/react-leaflet/lib/Tooltip.js b/node_modules/react-leaflet/lib/Tooltip.js
+index afb56eb..cfca23e 100644
+--- a/node_modules/react-leaflet/lib/Tooltip.js
++++ b/node_modules/react-leaflet/lib/Tooltip.js
+@@ -1,6 +1,6 @@
+ 'use client';
+-import { tooltip } from 'leaflet';
+-import { createDivOverlayComponent } from './div-overlay.js';
++import { tooltip } from "leaflet";
++import { createDivOverlayComponent } from "./div-overlay.js";
+ export const Tooltip = createDivOverlayComponent(function createTooltip(props, context) {
+     const tooltipInstance = tooltip(props, context.overlayContainer);
+     return {
+@@ -8,4 +8,4 @@
+         context
+     };
+ }
+-});
+\ No newline at end of file
++});
+diff --git a/node_modules/react-leaflet/lib/VideoOverlay.js b/node_modules/react-leaflet/lib/VideoOverlay.js
+index 9260d5b..8385633 100644
+--- a/node_modules/react-leaflet/lib/VideoOverlay.js
++++ b/node_modules/react-leaflet/lib/VideoOverlay.js
+@@ -1,6 +1,6 @@
+ 'use client';
+-import { videoOverlay } from 'leaflet';
+-import { createMediaOverlayComponent } from './media-overlay.js';
++import { videoOverlay } from "leaflet";
++import { createMediaOverlayComponent } from "./media-overlay.js";
+ export const VideoOverlay = createMediaOverlayComponent(function createVideoOverlay({ bounds , url , ...options }, context) {
+     const overlay = videoOverlay(url, bounds, options);
+     return {
+diff --git a/node_modules/react-leaflet/lib/div-overlay.js b/node_modules/react-leaflet/lib/div-overlay.js
+index d6cc5dd..72221ed 100644
+--- a/node_modules/react-leaflet/lib/div-overlay.js
++++ b/node_modules/react-leaflet/lib/div-overlay.js
+@@ -1,10 +1,10 @@
+ 'use client';
+-import { useEffect, useImperativeHandle, useMemo, useRef, useState, forwardRef } from 'react';
+-import { createPortal } from 'react-dom';
+-import { useAttribution } from './attribution.js';
+-import { LeafletProvider, useLeafletContext } from './context.js';
+-import { useEventHandlers } from './events.js';
+-import { DivOverlay as DivOverlay_ } from './DivOverlay.js';
++import { useEffect, useImperativeHandle, useMemo, useRef, useState, forwardRef } from "react";
++import { createPortal } from "react-dom";
++import { useAttribution } from "./attribution.js";
++import { LeafletProvider, useLeafletContext } from "./context.js";
++import { useEventHandlers } from "./events.js";
++import { DivOverlay as DivOverlay_ } from "./DivOverlay.js";
+ export function createDivOverlayComponent(createInstance, useLifecycle) {
+     function DivOverlayComponent(props, ref) {
+         const { instance , context  } = useMemo(()=>createInstance(props, useLeafletContext())
+diff --git a/node_modules/react-leaflet/lib/events.js b/node_modules/react-leaflet/lib/events.js
+index eb91a03..c96f26e 100644
+--- a/node_modules/react-leaflet/lib/events.js
++++ b/node_modules/react-leaflet/lib/events.js
+@@ -1,5 +1,5 @@
+ 'use client';
+-import { useEffect, useMemo, useRef } from 'react';
++import { useEffect, useMemo, useRef } from "react";
+ export function useEventHandlers(element, eventHandlers) {
+     const preservedHandlers = useRef({});
+     useEffect(function addEvents() {
+diff --git a/node_modules/react-leaflet/lib/path.js b/node_modules/react-leaflet/lib/path.js
+index 72eb410..0585f9e 100644
+--- a/node_modules/react-leaflet/lib/path.js
++++ b/node_modules/react-leaflet/lib/path.js
+@@ -1,8 +1,8 @@
+ 'use client';
+-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+-import { LeafletProvider, useLeafletContext } from './context.js';
+-import { useEventHandlers } from './events.js';
+-import { usePathOptions } from './options.js';
++import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
++import { LeafletProvider, useLeafletContext } from "./context.js";
++import { useEventHandlers } from "./events.js";
++import { usePathOptions } from "./options.js";
+ export function createPathComponent(useElement) {
+     function PathComponent(props, ref) {
+         const context = useLeafletContext();
+diff --git a/node_modules/react-leaflet/package.json b/node_modules/react-leaflet/package.json
+index 54ed4a2..bdf32cd 100644
+--- a/node_modules/react-leaflet/package.json
++++ b/node_modules/react-leaflet/package.json
+@@ -37,8 +37,8 @@
+     "url": "https://github.com/PaulLeCam/react-leaflet/issues"
+   },
+   "peerDependencies": {
+     "leaflet": "^1.7.1",
+-    "react": "^18.0.0",
+-    "react-dom": "^18.0.0"
++    "react": "^18.0.0 || ^19.0.0",
++    "react-dom": "^18.0.0 || ^19.0.0"
+   },
+   "dependencies": {},
+   "devDependencies": {

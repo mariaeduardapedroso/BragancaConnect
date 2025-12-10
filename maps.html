@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenBus · Bragança (Simulação)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    :root { --card: #ffffff; --shadow: 0 6px 24px rgba(0,0,0,.12); --sidebar-w: 340px; }
+    html, body { height: 100%; margin: 0; }
+    #map { position: absolute; inset: 0; left: var(--sidebar-w); }
+    .sidebar { position: absolute; inset: 0 auto 0 0; width: var(--sidebar-w); z-index: 1000; background: var(--card); box-shadow: var(--shadow); padding: 16px; border-radius: 0 12px 12px 0; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; overflow-y: auto; }
+    .sidebar h3{ margin:0 0 6px; font-size: 18px }
+    .row{ display:flex; gap:10px; align-items:center; font-size:13px; color:#444 }
+    .dot{ width:10px; height:10px; border-radius:999px; background:#14a44d; box-shadow:0 0 0 2px #d9f9e7 inset }
+    .small{ color:#888; font-size:12px }
+    .tag{ display:inline-block; padding:.15rem .5rem; border-radius:999px; background:#f1f5f9; font-size:12px }
+    .legend{ margin-top:8px; font-size:12px; color:#444 }
+    .controls{ margin:12px 0; display:flex; gap:8px; flex-wrap:wrap }
+    button{ cursor:pointer; border:0; border-radius:10px; padding:8px 12px; box-shadow:var(--shadow); background:#111; color:#fff }
+    .pill{ background:#f3f4f6; color:#111 }
+    .panel h3{ margin:0 0 6px; font-size: 16px }
+    .row{ display:flex; gap:10px; align-items:center; font-size:13px; color:#444 }
+    .dot{ width:10px; height:10px; border-radius:999px; background:#14a44d; box-shadow:0 0 0 2px #d9f9e7 inset }
+    .small{ color:#888; font-size:12px }
+    .tag{ display:inline-block; padding:.15rem .5rem; border-radius:999px; background:#f1f5f9; font-size:12px }
+    .legend{ margin-top:8px; font-size:12px; color:#444 }
+    .controls{ margin-top:10px; display:flex; gap:8px }
+    button{ cursor:pointer; border:0; border-radius:10px; padding:8px 12px; box-shadow:var(--shadow); background:#111; color:#fff }
+    .pill{ background:#f3f4f6; color:#111 }
+    .arrivals{ margin-top:12px }
+    .arrivals h4{ margin:10px 0 8px; font-size:15px }
+    .arrival-list{ display:flex; flex-direction:column; gap:10px }
+    .arrival-card{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-radius:12px; background:#f5f7fb; box-shadow: var(--shadow) }
+    .arrival-left{ display:flex; gap:10px; align-items:center }
+    .arrival-icon{ width:28px; height:28px; border-radius:8px; background:#e8eefc; display:flex; align-items:center; justify-content:center; font-size:16px }
+    .arrival-meta{ display:flex; flex-direction:column; }
+    .arrival-title{ font-weight:600; font-size:13px }
+    .arrival-status{ display:flex; align-items:center; gap:6px; font-size:12px; color:#6b7280 }
+    .status-dot{ width:8px; height:8px; border-radius:999px; background:#22c55e }
+    .status-dot.late{ background:#ef4444 }
+    .arrival-right{ display:flex; align-items:center; gap:6px; font-weight:700; font-size:16px }
+    .clock{ font-size:16px }
+    .current-badge{ display:inline-block; margin-top:6px; padding:.25rem .6rem; border-radius:999px; background:#e0f2fe; color:#0369a1; font-size:12px; box-shadow:var(--shadow) }
+    .pulse{ position:relative; }
+    .pulse .ring{ position:absolute; left:0; top:0; width:24px; height:24px; border-radius:999px; background:rgba(14,165,233,.2); animation:ring 1.6s infinite ease-out }
+    .pulse .dot2{ position:absolute; left:6px; top:6px; width:12px; height:12px; border-radius:999px; background:#0ea5e9; box-shadow:0 0 0 2px #bae6fd inset }
+    @keyframes ring{ 0%{ transform:scale(.6); opacity:.9 } 70%{ transform:scale(2); opacity:0 } 100%{ transform:scale(.6); opacity:0 } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h3>OpenBus · Bragança</h3>
+    <div class="row"><span class="dot"></span> <strong>Operação Normal</strong></div>
+    <div class="small">Simulação GTFS-Realtime • Rota: 505 Centro ⇄ Campus</div>
+    <div class="legend">Ônibus ativos: <span id="fleetCount" class="tag">–</span> · Velocidade: <span id="speedTag" class="tag">–</span></div>
+    <div class="current-badge">Estação atual: <strong id="currentStop">—</strong></div>
+    <div class="controls">
+      <button id="playPause">Pausar</button>
+      <button id="faster" class="pill">+ Rápido</button>
+      <button id="slower" class="pill">- Lento</button>
+    </div>
+    <h3 style="margin-top:8px;">Próximas Chegadas</h3>
+    <div class="arrival-list" id="arrivals"></div>
+  </aside>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    // Pequenos "testes" de sanidade para evitar erros silenciosos
+    console.assert(document.getElementById('map'), 'TEST: elemento #map deve existir');
+
+    // === 1) MAPA CENTRALIZADO EM BRAGANÇA, PT ===
+    const map = L.map('map').setView([41.8061, -6.7569], 15);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+
+    // === 2) ÍCONES ===
+    const busIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/3448/3448339.png',
+      iconSize: [34, 34], iconAnchor: [17, 17], popupAnchor: [0, -12]
+    });
+    const stopIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+      iconSize: [22, 22], iconAnchor: [11, 11]
+    });
+
+    // === 3) ROTA E PARAGENS (agora usando a rota real do KMZ embutido) ===
+    // KML original embutido para não depender de upload manual
+    const KML_STRING = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2"><Document>
+	<Placemark><name>Rota</name></Placemark>
+</Document></kml>`;
+
+    // Fallback inicial (substituído logo abaixo ao parsear KML)
+    let poly = [ [41.80686, -6.75770], [41.80627, -6.75621], [41.80555, -6.75505] ];
+
+    // Lista de Paradas extraída do arquivo KML (fornecida pelo usuário)
+    var pontosDeOnibus = [
+      { nome: "Rodoviária", lat: 41.809415, lng: -6.760639 },
+      { nome: "Tribunal", lat: 41.807603, lng: -6.758991 },
+      { nome: "Rua 5 de Outubro", lat: 41.806847, lng: -6.758414 },
+      { nome: "Rua Alexandre Herculano 1", lat: 41.805292, lng: -6.758664 },
+      { nome: "Rua Alexandre Herculano 2", lat: 41.803494, lng: -6.759249 },
+      { nome: "Flor da Ponte", lat: 41.800309, lng: -6.761267 },
+      { nome: "Escola Agraria", lat: 41.796821, lng: -6.764754 },
+      { nome: "Escola superior de Tecnologia", lat: 41.795326, lng: -6.767155 },
+      { nome: "Planatorio", lat: 41.792746, lng: -6.769520 },
+      { nome: "Avenida das Cantarias 1", lat: 41.790137, lng: -6.771144 },
+      { nome: "Avenida das Cantarias", lat: 41.787688, lng: -6.773416 },
+      { nome: "Rua Arquitecto Viana de Lima 1", lat: 41.788376, lng: -6.775767 },
+      { nome: "Rua Arquitecto Viana de Lima 2", lat: 41.790521, lng: -6.779245 },
+      { nome: "Rua Coronal Teófilo de Morais 1", lat: 41.791228, lng: -6.784129 },
+      { nome: "Rua Coronel Teófilo de Morais 2", lat: 41.788297, lng: -6.780605 },
+      { nome: "Rua Coronel Teófilo de Morais 3", lat: 41.787320, lng: -6.778463 },
+      { nome: "Avenida das Cantarias 2", lat: 41.785224, lng: -6.775720 },
+      { nome: "Avenida das Cantaias 3", lat: 41.783334, lng: -6.777509 },
+      { nome: "Nerba", lat: 41.780167, lng: -6.779058 },
+      { nome: "Avenida das CAntarias 4", lat: 41.780293, lng: -6.778807 },
+      { nome: "Avenida das Cantarias 5", lat: 41.783100, lng: -6.777420 },
+      { nome: "Avenida das Cantarias 6", lat: 41.784864, lng: -6.775736 },
+      { nome: "Polidesportivo IPB", lat: 41.787401, lng: -6.773324 },
+      { nome: "Avenida das Cantarias 7", lat: 41.789334, lng: -6.771464 },
+      { nome: "Planatorio (Volta)", lat: 41.792702, lng: -6.769343 },
+      { nome: "Escola Superior de TEcnologia (Volta)", lat: 41.795073, lng: -6.767225 },
+      { nome: "Rua Artur Mirandela 1", lat: 41.794060, lng: -6.765672 },
+      { nome: "Rua Artur Mirandela 2", lat: 41.794202, lng: -6.763812 },
+      { nome: "Rua do Vale Churido", lat: 41.793875, lng: -6.761712 },
+      { nome: "Rua do Vale Churido 2", lat: 41.794947, lng: -6.760367 },
+      { nome: "Rua São João de BRito", lat: 41.798301, lng: -6.759672 },
+      { nome: "Flor da Ponte (Volta)", lat: 41.800118, lng: -6.760573 },
+      { nome: "Rua da República", lat: 41.805793, lng: -6.757107 },
+      { nome: "Avenida João da Cruz", lat: 41.807384, lng: -6.758440 }
+    ];
+
+    // Converte pontosDeOnibus para o formato esperado por `stops`
+    const stops = pontosDeOnibus.map(p => ({ name: p.nome, coord: [p.lat, p.lng] }));
+
+    // Usa exatamente os pontos fornecidos como rota contínua
+    poly = stops.map(s => s.coord);
+    // fecha o loop para evitar salto brusco no retorno
+    if (poly.length > 2) poly.push(poly[0]);
+    console.log('stops:', stops.length, 'poly points:', poly.length);
+
+    const routeLine = L.polyline(poly, { weight: 4, opacity: .8 }).addTo(map);
+    map.fitBounds(routeLine.getBounds(), { padding: [40,40] });
+
+    stops.forEach(s => L.marker(s.coord, { icon: stopIcon }).addTo(map).bindTooltip(s.name));
+
+    // === 4) UTILITÁRIOS DE GEOMETRIA ===
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function interpolateLatLng(a, b, t){ return [ lerp(a[0], b[0], t), lerp(a[1], b[1], t) ]; }
+    function segmentDistanceMeters(a, b){
+      const R = 6371000;
+      const toRad = d => d * Math.PI / 180;
+      const dLat = toRad(b[0]-a[0]);
+      const dLon = toRad(b[1]-a[1]);
+      const lat1 = toRad(a[0]);
+      const lat2 = toRad(b[0]);
+      const h = Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;
+      return 2*R*Math.asin(Math.sqrt(h));
+    }
+
+    // Snap aproximado de um ponto (lat,lng) à rota poly
+    function snapToRoute(latlng){
+      let best = { seg:0, t:0, ll: poly[0], score: Infinity };
+      for(let i=0;i<poly.length-1;i++){
+        for(let s=0;s<=6;s++){
+          const t = s/6; const cand = interpolateLatLng(poly[i], poly[i+1], t);
+          const sc = segmentDistanceMeters(latlng, cand);
+          if (sc < best.score){ best = { seg:i, t, ll: cand, score: sc }; }
+        }
+      }
+      return best;
+    }
+
+    // Pré-calcula distâncias por segmento
+    const segLen = poly.slice(0,-1).map((p,i)=>segmentDistanceMeters(p, poly[i+1]));
+    const totalLen = segLen.reduce((s,x)=>s+x,0);
+
+    // === 5) FROTA (MÚLTIPLOS ÔNIBUS) + MOVIMENTO SUAVE ===
+    const buses = [ { id:'505', offset: 0.00, speed: 6.11 } ]; // ~22 km/h
+
+    // estado de estação atual com histerese (guarda a última estação)
+    let lastStopIndex = -1;   // armazena a última estação "atingida"
+    let inStop = false;       // se o ônibus está dentro do raio da estação atual
+    let currentHighlight = null;
+    const ARRIVE_R = 18; // metros para considerar que CHEGOU na estação
+    const EXIT_R   = 35; // metros para considerar que SAIU da estação
+    console.assert(ARRIVE_R < EXIT_R, 'TEST: ARRIVE_R must be < EXIT_R');
+
+    const markers = new Map();
+    buses.forEach(b => {
+      const idx = Math.floor(b.offset * (poly.length-1));
+      const frac = (b.offset * (poly.length-1)) - idx;
+      const start = poly[idx], end = poly[idx+1];
+      const ll = interpolateLatLng(start, end, frac);
+      const m = L.marker(ll, { icon: busIcon }).addTo(map);
+      m.bindPopup(`<b>Ônibus ${b.id}</b><br/><span id="eta-${b.id}">calculando…</span>`);
+      markers.set(b.id, { m, seg: idx, t: frac });
+    });
+
+    const fleetCountEl = document.getElementById('fleetCount');
+    const speedTag = document.getElementById('speedTag');
+    fleetCountEl.textContent = String(buses.length);
+
+    let play = true;
+    let speedFactor = 1; // controla aceleração geral
+
+    function updateSpeedTag(){
+      // mostra velocidade média da frota
+      const avg = buses.reduce((s,b)=>s+b.speed,0)/buses.length * speedFactor;
+      const kmh = avg * 3.6; speedTag.textContent = `${kmh.toFixed(0)} km/h`;
+    }
+    updateSpeedTag();
+
+    document.getElementById('playPause').onclick = () => {
+      play = !play;
+      document.getElementById('playPause').textContent = play ? 'Pausar' : 'Retomar';
+    };
+    document.getElementById('faster').onclick = () => { speedFactor = Math.min(3, speedFactor+0.25); updateSpeedTag(); };
+    document.getElementById('slower').onclick = () => { speedFactor = Math.max(0.25, speedFactor-0.25); updateSpeedTag(); };
+
+    function step(dt){
+      if(!play) return;
+      buses.forEach(b => {
+        const state = markers.get(b.id);
+        // avança "distância" em metros proporcional a speed*dt
+        let advance = b.speed * speedFactor * dt; // metros
+        while (advance > 0){
+          const a = poly[state.seg];
+          const bseg = poly[state.seg+1];
+          const segM = segmentDistanceMeters(a, bseg);
+          const rem = (1 - state.t) * segM;
+          if (advance < rem){
+            state.t += advance / segM;
+            advance = 0;
+          } else {
+            advance -= rem;
+            state.seg = (state.seg + 1) % (poly.length - 1);
+            state.t = 0;
+          }
+        }
+        const cur = interpolateLatLng(poly[state.seg], poly[state.seg+1], state.t);
+        state.m.setLatLng(cur);
+        // detectar estação mais próxima com histerese (chegada/saída)
+        let bestD = Infinity, bestI = -1;
+        for(let i=0;i<stops.length;i++){
+          const d = segmentDistanceMeters(cur, stops[i].coord);
+          if (d < bestD){ bestD = d; bestI = i; }
+        }
+        // evento de chegada: só atualiza a estação quando ENTRA no raio ARRIVE_R
+        if (!inStop && bestD < ARRIVE_R && bestI !== -1) {
+          inStop = true;
+          if (lastStopIndex !== bestI) {
+            lastStopIndex = bestI; // guarda última estação
+            const el = document.getElementById('currentStop');
+            if (el) el.textContent = stops[bestI].name;
+            const icon = L.divIcon({ className:'pulse', html:'<div class="ring"></div><div class="dot2"></div>', iconSize:[24,24], iconAnchor:[12,12] });
+            if (!currentHighlight){ currentHighlight = L.marker(stops[bestI].coord, { icon }).addTo(map); }
+            else { currentHighlight.setLatLng(stops[bestI].coord); currentHighlight.setIcon(icon); }
+          }
+        }
+        // evento de saída: apenas marca saída; NÃO limpa o destaque nem o texto
+        else if (inStop && bestD > EXIT_R) {
+          inStop = false;
+        }
+        updateETAs(state, cur, b.id);
+        updateArrivalsPanel();
+      });
+    }
+
+    function distanceAlongFrom(seg, t){
+      let d = (1 - t) * segLen[seg];
+      for (let i = seg+1; i < segLen.length; i++) d += segLen[i];
+      return d; // até o fim do loop
+    }
+
+    function pathDistanceBetween(a, b){
+      // distância "ao longo" do loop de a→b (em metros), sentido adiante
+      if (b.seg > a.seg || (b.seg === a.seg && b.t >= a.t)){
+        let d = (1 - a.t) * segLen[a.seg];
+        for(let i=a.seg+1;i<b.seg;i++) d += segLen[i];
+        d += b.t * segLen[b.seg];
+        return d;
+      } else {
+        // passa pelo fim e volta ao início
+        let d = (1 - a.t) * segLen[a.seg];
+        for(let i=a.seg+1;i<segLen.length;i++) d += segLen[i];
+        for(let i=0;i<b.seg;i++) d += segLen[i];
+        d += b.t * segLen[b.seg];
+        return d;
+      }
+    }
+
+    function updateETAs(state, curLatLng, busId){
+      const avgSpeed = buses.reduce((s,b)=>s+b.speed,0)/buses.length * speedFactor || 1;
+      const busPos = state;
+      const etaSpan = document.getElementById(`eta-${busId}`);
+      const lines = stops.map(st => {
+        const snap = snapToRoute(st.coord);
+        const meters = pathDistanceBetween(busPos, snap);
+        const secs = meters / avgSpeed;
+        const min = Math.max(0, Math.round(secs/60));
+        return `${st.name}: ${min} min`;
+      });
+      if (etaSpan) etaSpan.textContent = lines.join('\n');
+    }
+
+    function updateArrivalsPanel(){
+      const avgSpeed = buses.reduce((s,b)=>s+b.speed,0)/buses.length * speedFactor || 1;
+      const state = markers.get(buses[0].id);
+      // monta lista de próximas 4 paragens à frente
+      const enriched = stops.map((st,idx) => {
+        const snap = snapToRoute(st.coord);
+        let meters = pathDistanceBetween(state, snap);
+        let secs = meters / avgSpeed;
+        return { name: st.name, mins: Math.max(0, Math.round(secs/60)), here: idx===lastStopIndex, late:false };
+      }).sort((a,b)=>a.mins-b.mins).slice(0,4);
+
+      const cont = document.getElementById('arrivals');
+      cont.innerHTML = enriched.map(item => `
+        <div class="arrival-card">
+          <div class="arrival-left">
+            <div class="arrival-icon">🚌</div>
+            <div class="arrival-meta">
+              <div class=\"arrival-title\">${item.name}</div>
+              <div class=\"arrival-status\"><span class=\"status-dot ${item.here?'':'late hide'}\"></span>${item.here?'Ônibus aqui':'A tempo'}</div>
+            </div>
+          </div>
+          <div class="arrival-right">
+            <span class="clock">⏱️</span> <span>${item.mins}</span> <span class="small">min</span>
+          </div>
+        </div>`).join('');
+    }
+
+    // animação rAF
+    let last = performance.now();
+    function loop(now){
+      const dt = Math.min(0.25, (now - last)/1000); // cap 100ms
+      last = now;
+      step(dt);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

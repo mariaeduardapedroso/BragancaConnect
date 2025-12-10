@@ -1,7 +1,6 @@
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
-import { MapPlaceholder } from '@/components/map-placeholder';
 import {
   Card,
   CardContent,
@@ -18,6 +17,10 @@ import {
 import { Bus, Circle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
+
+const BusMap = dynamic(() => import('@/components/bus-map'), { ssr: false });
+
 
 const busLines = [
   { id: '3A', name: 'Linha 3A: Sé', status: 'A tempo', nextArrival: 5 },
@@ -102,7 +105,7 @@ export default function BusesPage() {
         <main>
           <Card className="h-full">
             <CardContent className="p-0 h-full">
-              <MapPlaceholder className="aspect-video lg:aspect-auto h-full min-h-[400px] lg:min-h-[600px]" />
+               <BusMap className="aspect-video lg:aspect-auto h-full min-h-[400px] lg:min-h-[600px]" />
             </CardContent>
           </Card>
         </main>
