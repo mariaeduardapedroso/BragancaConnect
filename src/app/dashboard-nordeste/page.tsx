@@ -2,7 +2,6 @@
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
-import { MapPlaceholder } from '@/components/map-placeholder';
 import {
   Card,
   CardContent,
@@ -99,13 +98,6 @@ export default function WasteBinsPage() {
             </CardContent>
           </Card>
         </aside>
-        <main>
-          <Card className="h-full">
-            <CardContent className="p-0 h-full">
-              <MapPlaceholder className="aspect-auto h-full min-h-[600px]" />
-            </CardContent>
-          </Card>
-        </main>
       </div>
     </div>
   );
