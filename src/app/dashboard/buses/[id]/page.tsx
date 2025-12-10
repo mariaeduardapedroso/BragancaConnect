@@ -1,3 +1,4 @@
+
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
@@ -53,7 +54,7 @@ export default function BusLineDetailPage({ params }: { params: { id: string } }
         <Card className="shadow-lg">
           <CardHeader>
             <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-3 text-3xl">
+                <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl">
                 <Bus className="h-8 w-8 text-primary" />
                 {busLineDetails.name}
                 </CardTitle>
@@ -97,7 +98,7 @@ export default function BusLineDetailPage({ params }: { params: { id: string } }
                 <CardDescription>Visualização do trajeto completo da linha.</CardDescription>
             </CardHeader>
           <CardContent className="p-0 h-full">
-            <div className="h-full w-full rounded-b-lg bg-muted flex items-center justify-center">
+            <div className="h-full w-full rounded-b-lg bg-muted flex items-center justify-center min-h-[300px] md:min-h-0">
                  <p className="text-muted-foreground">Mapa com o percurso da linha apareceria aqui.</p>
             </div>
           </CardContent>

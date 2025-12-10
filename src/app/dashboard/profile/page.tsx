@@ -1,3 +1,4 @@
+
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
@@ -42,7 +43,7 @@ export default function ProfilePage() {
             </Button>
             </div>
             <div>
-              <CardTitle className="text-4xl">João Dinis</CardTitle>
+              <CardTitle className="text-3xl md:text-4xl">João Dinis</CardTitle>
               <CardDescription className="text-base mt-1">
                 Membro desde 2023
               </CardDescription>

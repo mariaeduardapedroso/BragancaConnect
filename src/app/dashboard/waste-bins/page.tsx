@@ -1,3 +1,4 @@
+
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
@@ -38,7 +39,7 @@ export default function WasteBinsPage() {
        <Card>
         <CardHeader>
           <CardTitle>Mapa de Contentores Orgânicos</CardTitle>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <CardDescription>
                 Encontre os pontos de recolha de resíduos orgânicos na cidade.
             </CardDescription>
@@ -50,7 +51,7 @@ export default function WasteBinsPage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <MapPlaceholder className="aspect-video h-[70vh] min-h-[600px]" />
+          <MapPlaceholder className="aspect-square md:aspect-video h-auto max-h-[70vh] min-h-[400px]" />
         </CardContent>
       </Card>
     </div>

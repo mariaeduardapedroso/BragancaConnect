@@ -18,7 +18,7 @@ const binData = [
 
 export default function WasteBinChart() {
   return (
-    <ResponsiveContainer width="100%" height={120}>
+    <ResponsiveContainer width="100%" height={100}>
       <BarChart data={binData} layout="vertical" margin={{ left: -10 }}>
         <XAxis type="number" hide />
         <YAxis type="category" dataKey="name" hide />
