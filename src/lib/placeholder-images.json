@@ -37,10 +37,22 @@
       "imageHint": "coffee cup"
     },
     {
-      "id": "reward-fertilizer",
+      "id": "reward-fertilizer-10kg",
       "description": "Bag of organic fertilizer.",
       "imageUrl": "https://images.unsplash.com/photo-1629994982633-684a7243e86f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBvZiUyMHNvaWx8ZW58MHx8fHwxNzY1MzE4MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "bag soil"
+    },
+    {
+      "id": "reward-fertilizer-5kg",
+      "description": "5kg bag of organic fertilizer.",
+      "imageUrl": "https://images.unsplash.com/photo-1590382346069-166946a3b2df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBvZiUyMGZlcnRpbGl6ZXJ8ZW58MHx8fHwxNzY1NzAxMTU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fertilizer bag"
+    },
+    {
+      "id": "reward-fertilizer-1kg",
+      "description": "1kg bag of organic fertilizer.",
+      "imageUrl": "https://images.unsplash.com/photo-1600585152220-401c4c16f217?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiYWclMjBvZiUyMHNvaWx8ZW58MHx8fHwxNzY1NzAxMTU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "small soil bag"
     }
   ]
 }

@@ -17,10 +17,22 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const rewards = [
   {
-    id: 'reward-fertilizer',
+    id: 'reward-fertilizer-10kg',
     title: 'Saco de Adubo Orgânico (10kg)',
     description: 'Fertilizante de alta qualidade, produzido localmente a partir da compostagem.',
     points: 2000,
+  },
+  {
+    id: 'reward-fertilizer-5kg',
+    title: 'Saco de Adubo Orgânico (5kg)',
+    description: 'Fertilizante de alta qualidade, produzido localmente a partir da compostagem.',
+    points: 1000,
+  },
+  {
+    id: 'reward-fertilizer-1kg',
+    title: 'Saco de Adubo Orgânico (1kg)',
+    description: 'Fertilizante de alta qualidade, produzido localmente a partir da compostagem.',
+    points: 250,
   },
 ];
 
