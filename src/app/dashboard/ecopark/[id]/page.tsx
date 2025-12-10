@@ -82,12 +82,6 @@ export default function EcoparkDetailPage({
                 </div>
               </div>
             </div>
-             <Button asChild size="lg" className="w-full h-14 text-xl">
-              <Link href="/dashboard/sustainable-routing">
-                <Route className="mr-3" />
-                Criar Rota até Aqui
-              </Link>
-            </Button>
           </CardContent>
         </Card>
 

@@ -4,7 +4,7 @@ import { PageTitle } from '@/components/layout/page-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { BarChart, Route, Trash2 } from 'lucide-react';
+import { BarChart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 // Static data for a single bin, as we don't have a backend
@@ -89,12 +89,6 @@ export default function WasteBinDetailPage({
               </span>
               <span>{binDetails.lastCollection}</span>
             </div>
-            <Button asChild size="lg" className="w-full h-14 text-xl">
-              <Link href="/dashboard/sustainable-routing">
-                <Route className="mr-3" />
-                Criar Rota até Aqui
-              </Link>
-            </Button>
           </CardContent>
         </Card>
 

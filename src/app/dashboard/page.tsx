@@ -36,11 +36,6 @@ export default function DashboardPage() {
             <CardTitle>Ações Rápidas</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-             <Button asChild variant="outline" className="justify-start h-14 text-base">
-              <Link href="/dashboard/sustainable-routing">
-                <Leaf className="mr-4 h-6 w-6 text-accent" /> Planear Rota Sustentável
-              </Link>
-            </Button>
             <Button asChild variant="outline" className="justify-start h-14 text-base">
               <Link href="/dashboard/composting">
                 <Trash2 className="mr-4 h-6 w-6 text-primary" /> Registar Compostagem

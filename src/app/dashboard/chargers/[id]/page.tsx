@@ -80,13 +80,6 @@ export default function ChargerDetailPage({
               </span>
               <span className='flex items-center gap-2 font-bold'><Clock className='h-5 w-5' />{chargerDetails.estimatedWait}</span>
             </div>
-           
-            <Button asChild size="lg" className="w-full h-14 text-xl">
-              <Link href="/dashboard/sustainable-routing">
-                <Route className="mr-3" />
-                Criar Rota até Aqui
-              </Link>
-            </Button>
           </CardContent>
         </Card>
 
