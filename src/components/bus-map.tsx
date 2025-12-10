@@ -145,13 +145,13 @@ export default function BusMap({ className }: { className?: string }) {
         // Cleanup function
         return () => {
             cancelAnimationFrame(animationFrameId);
-            if (map) {
-                map.remove();
+            if (mapRef.current) {
+                mapRef.current.remove();
                 mapRef.current = null;
             }
         };
 
     }, []); // Empty dependency array ensures this runs only once
 
-    return <div ref={mapContainerRef} className={cn("h-full w-full", className)}></div>;
+    return <div ref={mapContainerRef} className={cn("h-full w-full rounded-b-lg", className)} style={{ zIndex: 0 }}></div>;
 }
