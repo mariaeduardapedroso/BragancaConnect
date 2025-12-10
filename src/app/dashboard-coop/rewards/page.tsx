@@ -37,9 +37,7 @@ export default function RewardsPage() {
       <PageTitle title="Trocar Pontos" />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {rewards.map((reward) => {
-                // Find a placeholder image. If one for the reward id exists, use it. Otherwise, use a default one.
-                let image = PlaceHolderImages.find(img => img.id === reward.id);
-                if (!image) image = PlaceHolderImages.find(img => img.id === 'reward-1');
+                const image = PlaceHolderImages.find(img => img.id === reward.id);
 
                 return (
                     <Card key={reward.id} className="flex flex-col shadow-lg">
