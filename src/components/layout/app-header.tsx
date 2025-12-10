@@ -19,11 +19,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { SidebarTrigger } from '../ui/sidebar';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export function AppHeader() {
   const userAvatar = PlaceHolderImages.find(
     (img) => img.id === 'user-avatar-1'
   );
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+      setIsClient(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
@@ -43,7 +50,7 @@ export function AppHeader() {
           <Bell className="h-5 w-5" />
           <span className="sr-only">Toggle notifications</span>
         </Button>
-        <DropdownMenu>
+        {isClient && <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative flex items-center gap-2 p-1 h-10 rounded-full">
               <Avatar className="h-8 w-8">
@@ -76,7 +83,7 @@ export function AppHeader() {
                 <Link href="/" className='text-destructive'>Sair</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu>}
       </div>
     </header>
   );

@@ -18,6 +18,7 @@ import { Bus, Circle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 
 const BusMap = dynamic(() => import('@/components/bus-map'), { ssr: false });
 
@@ -30,6 +31,12 @@ const busLines = [
 ];
 
 export default function BusesPage() {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
   return (
     <div>
       <PageTitle title="Autocarros em Tempo Real" />
@@ -40,7 +47,7 @@ export default function BusesPage() {
               <CardTitle>Filtrar por Linha</CardTitle>
             </CardHeader>
             <CardContent>
-              <Select defaultValue="all">
+             {isClient && <Select defaultValue="all">
                 <SelectTrigger className="h-12 text-base">
                   <SelectValue placeholder="Selecionar linha..." />
                 </SelectTrigger>
@@ -52,7 +59,7 @@ export default function BusesPage() {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select>}
             </CardContent>
           </Card>
           <Card className="flex-1">
