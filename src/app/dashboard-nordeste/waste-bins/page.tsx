@@ -2,7 +2,6 @@
 'use client';
 
 import { PageTitle } from '@/components/layout/page-title';
-import { MapPlaceholder } from '@/components/map-placeholder';
 import {
   Card,
   CardContent,
@@ -11,6 +10,11 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { Trash2, Circle, Route, Clock, AlertTriangle } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+
+const WasteBinMap = dynamic(() => import('@/components/waste-bin-map'), { ssr: false });
+
 
 const binsOnRoute = [
   { id: 'bin-001', location: 'Praça da Sé', level: 95, status: 'Cheio' },
@@ -33,6 +37,12 @@ const getStatusColor = (status: string) => {
 
 
 export default function OptimizedRoutePage() {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
   return (
     <div>
       <PageTitle title="Rota Otimizada de Recolha" />
@@ -79,7 +89,7 @@ export default function OptimizedRoutePage() {
       <Card>
         <CardHeader>
           <CardTitle>Mapa da Rota de Recolha</CardTitle>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <CardDescription>
                 Visualização do trajeto otimizado passando pelos contentores que necessitam de atenção.
             </CardDescription>
@@ -91,8 +101,9 @@ export default function OptimizedRoutePage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-            {/* Em um app real, este placeholder seria substituído por um mapa interativo com a rota e os marcadores */}
-          <MapPlaceholder className="aspect-video h-[60vh] min-h-[500px]" />
+          <div className="aspect-square md:aspect-video h-auto max-h-[70vh] min-h-[400px]">
+            {isClient && <WasteBinMap />}
+          </div>
         </CardContent>
       </Card>
     </div>
