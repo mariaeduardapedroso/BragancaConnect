@@ -51,7 +51,7 @@ export default function WasteBinMap({ className }: { className?: string }) {
 
         // Icons
         const truckIcon = L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/1168/1168933.png',
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/3448/3448633.png',
             iconSize: [38, 38], iconAnchor: [19, 19],
         });
         const stopIcon = L.icon({
@@ -123,5 +123,5 @@ export default function WasteBinMap({ className }: { className?: string }) {
 
     }, []); 
 
-    return <div ref={mapContainerRef} className={cn("h-full w-full rounded-b-lg", className)}></div>;
+    return <div ref={mapContainerRef} className={cn("h-full w-full rounded-b-lg", className)} style={{ zIndex: 0 }}></div>;
 }
