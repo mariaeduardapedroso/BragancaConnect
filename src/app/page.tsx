@@ -23,7 +23,7 @@ const profiles = [
     type: 'Cooperado',
     description: 'Acesso para parceiros e empresas da rede.',
     icon: Building,
-    href: '/login',
+    href: '/login/cooperado',
   },
   {
     type: 'Nordeste',
@@ -37,7 +37,7 @@ export default function ProfileSelectionPage() {
   const splashBg = PlaceHolderImages.find((img) => img.id === 'splash-bg');
 
   return (
-    <main className="relative flex h-screen min-h-[600px] w-full flex-col items-center justify-center p-4">
+    <main className="relative flex h-screen min-h-[600px] w-full flex-col items-center justify-start p-4 pt-16 pb-8 md:justify-center">
       {splashBg && (
         <Image
           src={splashBg.imageUrl}
