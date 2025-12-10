@@ -22,12 +22,6 @@ const rewards = [
     description: 'Fertilizante de alta qualidade, produzido localmente a partir da compostagem.',
     points: 2000,
   },
-   {
-    id: 'reward-tools',
-    title: 'Kit de Jardinagem',
-    description: 'Ferramentas básicas para começar a sua horta em casa.',
-    points: 5000,
-  },
 ];
 
 export default function RewardsPage() {
