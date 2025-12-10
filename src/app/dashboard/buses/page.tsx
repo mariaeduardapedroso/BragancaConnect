@@ -30,7 +30,7 @@ export default function BusesPage() {
   return (
     <div>
       <PageTitle title="Autocarros em Tempo Real" />
-      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-[380px_1fr]">
+      <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6">
         <aside className="flex flex-col gap-6">
           <Card>
             <CardHeader>
@@ -102,7 +102,7 @@ export default function BusesPage() {
         <main>
           <Card className="h-full">
             <CardContent className="p-0 h-full">
-              <MapPlaceholder className="aspect-auto h-full min-h-[600px]" />
+              <MapPlaceholder className="aspect-video lg:aspect-auto h-full min-h-[400px] lg:min-h-[600px]" />
             </CardContent>
           </Card>
         </main>
